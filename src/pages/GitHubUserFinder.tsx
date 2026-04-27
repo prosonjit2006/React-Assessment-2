@@ -15,18 +15,25 @@ Repository info like stars & forks
 
 import axios from "axios";
 import { useEffect, useState } from "react";
+import type {
+  ReposData,
+  UserData,
+} from "../typescript/interface/userInterface";
+import api from "../lib/AxoisInstance";
 
 const GitHubUserFinder = () => {
   const [isLoading, setIsLoading] = useState<boolean>(false);
   const [isError, setIsError] = useState<string | null>(null);
   const [collectUserName, setCollectUserName] = useState<string>("");
   const [userName, setUserName] = useState<string>("");
-  const [userData, setUserData] = useState<any>(null);
-  const [repos, setRepos] = useState<any>(null);
+  const [userData, setUserData] = useState<UserData | null>(null);
+  const [repos, setRepos] = useState<ReposData | null>(null);
   const [ripoToggle, setRipoToggle] = useState<boolean>(false);
   // console.log(userName);
 
   useEffect(() => {
+    if (!userName) return;
+
     const response = async () => {
       setIsLoading(true);
       setIsError(null);
@@ -34,23 +41,21 @@ const GitHubUserFinder = () => {
       setRepos(null);
 
       try {
-        const res = await axios.get(
-          `https://api.github.com/users/${userName}`,
+        const res = await api.get(
+          userName
           //    https://docs.github.com/en/rest
         );
 
-        const resRepo = await axios.get(
-          `https://api.github.com/users/${userName}/repos`,
-        );
+        const resRepo = await api.get(`${userName}/repos`);
 
-        // console.log(res);
-        // console.log(resRepo);
+        console.log(res);
+        console.log(resRepo);
 
         setRepos(resRepo.data);
         setUserData(res.data);
       } catch (error) {
-        setIsError("User not found");
-        // setIsError(error?.message);
+        // setIsError("User not found");
+        setIsError(error?.message);
       } finally {
         setIsLoading(false);
       }
@@ -152,7 +157,7 @@ const GitHubUserFinder = () => {
 
           {ripoToggle && (
             <>
-              {repos?.slice(0, 5)?.length > 0 && (
+              {repos?.length > 0 && (
                 <div className=" text-start">
                   {repos?.slice(0, 5)?.map((repo) => (
                     <div

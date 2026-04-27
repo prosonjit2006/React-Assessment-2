@@ -11,7 +11,6 @@ Search by GitHub username
 Avatar, bio, repo list, follower count
 Repository info like stars & forks
 
-
 */
 
 import axios from "axios";
@@ -45,13 +44,13 @@ const GitHubUserFinder = () => {
         );
 
         // console.log(res);
-        console.log(resRepo);
+        // console.log(resRepo);
 
         setRepos(resRepo.data);
         setUserData(res.data);
       } catch (error) {
-        // setIsError("User not found");
-        setIsError(error?.message);
+        setIsError("User not found");
+        // setIsError(error?.message);
       } finally {
         setIsLoading(false);
       }
@@ -153,25 +152,25 @@ const GitHubUserFinder = () => {
 
           {ripoToggle && (
             <>
-              {repos?.slice(0, 6)?.length > 0 && (
+              {repos?.slice(0, 5)?.length > 0 && (
                 <div className=" text-start">
-                  {repos?.map((repo) => (
+                  {repos?.slice(0, 5)?.map((repo) => (
                     <div
                       key={repo.id}
                       className="border border-gray-400 p-5 rounded-lg mt-2"
                     >
                       {/* ripo name */}
                       <p className="mt-3 text-sm text-gray-600">
-                        <span className="font-bold">Repos Name:</span>{" "}
+                        <span className="font-bold">Repos Name:</span>
                         {repo?.name}
                       </p>
                       {/* ripo stars */}
                       <p className="mt-3 text-sm text-gray-600">
-                        <span className="font-bold">Repos Stars:</span>{" "}
+                        <span className="font-bold">Repos Stars:</span>
                         {repo?.stargazers_count}
                       </p>
                       <p className="mt-3 text-sm text-gray-600">
-                        <span className="font-bold">Repos Folks:</span>{" "}
+                        <span className="font-bold">Repos Folks:</span>
                         {repo?.forks_count}
                       </p>
 
